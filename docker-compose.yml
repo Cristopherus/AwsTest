@@ -1,7 +1,7 @@
 version: '3.0'
 
 services:
-        nginx:
-                image: nginx:latest
-                ports:
-                        - 80:80
+  nginx:
+    image: 396427124739.dkr.ecr.eu-central-1.amazonaws.com/my_nginx:latest
+    ports:
+    - 80:80
