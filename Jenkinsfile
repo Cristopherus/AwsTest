@@ -33,7 +33,7 @@ node {
     	sshagent (credentials: ['aws']) {
     		sh "echo 'STAGE SSH'"
     		sh "echo ${INSTANCE_IP}"
-        sh "echo 'SEKRET"
+        sh "echo 'SEKRET'"
         sh "echo ${db_pass}"
     		// sh "scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${INSTANCE_IP}:/home/ec2-user/"
     		// sh "ssh ec2-user@${INSTANCE_IP} -o StrictHostKeyChecking=no 'sudo docker stack deploy -c docker-compose.yml --with-registry-auth nginx'"
