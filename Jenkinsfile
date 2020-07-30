@@ -21,19 +21,23 @@ node {
   stage("Checkout") {
   	checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: 'git@github.com:Cristopherus/AwsTest.git']]])
   }
-  stage("Docker build"){
+  // stage("Docker build"){
 
-  	docker.withRegistry('https://396427124739.dkr.ecr.eu-central-1.amazonaws.com', "ecr:eu-central-1:aws-cli") {
-        def profile_docker_image = docker.build("my_nginx")
-        profile_docker_image.push()
-    }
-  }
+  // 	docker.withRegistry('https://396427124739.dkr.ecr.eu-central-1.amazonaws.com', "ecr:eu-central-1:aws-cli") {
+  //       def profile_docker_image = docker.build("my_nginx")
+  //       profile_docker_image.push()
+  //   }
+  // }
   stage("SSH") {
-  	sshagent (credentials: ['aws']) {
-  		sh "echo 'STAGE SSH'"
-  		sh "echo ${INSTANCE_IP}"
-  		sh "scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${INSTANCE_IP}:/home/ec2-user/"
-  		sh "ssh ec2-user@${INSTANCE_IP} -o StrictHostKeyChecking=no 'sudo docker stack deploy -c docker-compose.yml --with-registry-auth nginx'"
-  	}
+    withCredentials([string(credentialsId: 'sekret', variable: 'db_pass')]) {
+    	sshagent (credentials: ['aws']) {
+    		sh "echo 'STAGE SSH'"
+    		sh "echo ${INSTANCE_IP}"
+        sh "echo 'SEKRET"
+        sh "echo ${db_pass}"
+    		// sh "scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${INSTANCE_IP}:/home/ec2-user/"
+    		// sh "ssh ec2-user@${INSTANCE_IP} -o StrictHostKeyChecking=no 'sudo docker stack deploy -c docker-compose.yml --with-registry-auth nginx'"
+    	}
+    }
   }
 }
